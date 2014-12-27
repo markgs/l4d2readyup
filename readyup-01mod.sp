@@ -394,9 +394,7 @@ public Action:Ready_Cmd(client, args)
 {
 	if (inReadyUp)
 	{
-		isPlayerReady[client] = true;
-		if (CheckFullReady())
-			InitiateLiveCountdown();
+		InitiateLiveCountdown();
 	}
 
 	return Plugin_Handled;
@@ -406,8 +404,7 @@ public Action:Unready_Cmd(client, args)
 {
 	if (inReadyUp)
 	{
-		isPlayerReady[client] = false;
-		CancelFullReady();
+		InitiateLiveCountdown();
 	}
 
 	return Plugin_Handled;
@@ -418,13 +415,9 @@ public Action:ToggleReady_Cmd(client, args)
 	if (inReadyUp)
 	{
 		isPlayerReady[client] = !isPlayerReady[client];
-		if (isPlayerReady[client] && CheckFullReady())
+		if (isPlayerReady[client] && CheckFullReady()
 		{
 			InitiateLiveCountdown();
-		}
-		else
-		{
-			CancelFullReady();
 		}
 	}
 
@@ -814,11 +807,7 @@ CancelFullReady()
 {
 	if (readyCountdownTimer != INVALID_HANDLE)
 	{
-		SetTeamFrozen(L4D2Team_Survivor, GetConVarBool(l4d_ready_survivor_freeze));
-		inLiveCountdown = false;
-		CloseHandle(readyCountdownTimer);
-		readyCountdownTimer = INVALID_HANDLE;
-		PrintHintTextToAll("Countdown Cancelled!");
+		InitiateLiveCountdown();
 	}
 }
 
